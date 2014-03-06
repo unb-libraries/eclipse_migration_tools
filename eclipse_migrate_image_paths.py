@@ -51,8 +51,8 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
     return new_imagepath_guess
 
 
-tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/225'
-subdir_string = '/225'
+tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/admintools/eResources_admin'
+subdir_string = '/admintools/eResources_admin'
 media_server_url = 'http://media.lib.unb.ca'
 source_image_root = '/home/jsanford/gitDev/media-sourcetree-root'
 target_image_root = '/home/jsanford/gitDev/media-webtree-root'
@@ -115,14 +115,16 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
         # Replace old paths with new in HTML/PHP file.
         print "Replacing all In : " + full_treeitem_filepath
         with open(full_treeitem_filepath, 'w') as html_file:
+            # 
+            file_as_string = file_as_string.replace('@ include', 'include')
             for old_string, new_string in replace_queue.iteritems():
                 file_as_string = file_as_string.replace(old_string, new_string)
             html_file.write(file_as_string)
             html_file.close()
-        # Copy image files with new names to new location.
-        for source_filepath, destination_filepath in copy_queue.iteritems():
-            dstdir =  os.path.dirname(destination_filepath)
-            if not os.path.isdir(dstdir):
-                os.makedirs(dstdir)
-            shutil.copy(source_filepath, dstdir)
+#        # Copy image files with new names to new location.
+#        for source_filepath, destination_filepath in copy_queue.iteritems():
+#            dstdir =  os.path.dirname(destination_filepath)
+#            if not os.path.isdir(dstdir):
+#                os.makedirs(dstdir)
+#            shutil.copy(source_filepath, dstdir)
 
