@@ -30,8 +30,8 @@ def guess_new_includepath(include_path):
 
 
 tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/admintools'
-regex_to_find_paths = re.compile(r'include.*[\'\"](.*)[\'\"].*;')
 
+regex_to_find_paths = re.compile(r'include.*[\'\"](.*)[\'\"].*;')
 replace_queue = {}
 
 for parse_root, dirs, tree_files in os.walk(tree_to_walk):
