@@ -26,7 +26,7 @@ def guess_new_includepath(include_path):
     new_path_start = '/srv/www/lib.unb.ca/htdocs/'
     if include_path.startswith(old_path_start):
         return include_path.replace(old_path_start, new_path_start) 
-    return ''
+    return include_path
 
 
 tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/admintools'

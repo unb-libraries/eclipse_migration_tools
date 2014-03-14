@@ -16,6 +16,7 @@ import re
 import readline
 import shutil
 import unicodedata
+import tempfile
 
 
 def slugify_path(value):
@@ -51,18 +52,26 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
     return new_imagepath_guess
 
 
-tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/admintools/eResources_admin'
-subdir_string = '/admintools/eResources_admin'
-media_server_url = 'http://media.lib.unb.ca'
+tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/asin'
+subdir_string = '/asin'
+media_server_url = '//media.lib.unb.ca'
 source_image_root = '/home/jsanford/gitDev/media-sourcetree-root'
 target_image_root = '/home/jsanford/gitDev/media-webtree-root'
 
 replace_queue = {}
 
+script_file = open("copyset-migrate-to-media.sh", "wb")
+temp_filepath_on_eclipse = '/tmp/migrate-to-media'
+script_file.write("rm -rf {0}\n".format(temp_filepath_on_eclipse))
+script_file.write("mkdir {0}\n".format(temp_filepath_on_eclipse))
+script_file.write("cd /www\n")
+
 for parse_root, dirs, tree_files in os.walk(tree_to_walk):
     for cur_tree_file in tree_files:
         copy_queue = {}
-        # Read in tree file as string
+        # Get current spot in tree
+        cur_tree_location = parse_root.replace(tree_to_walk, '')
+
         full_treeitem_filepath = os.path.join(parse_root, cur_tree_file)
         html_file = open(full_treeitem_filepath, 'r')
         file_as_string = html_file.read()
@@ -73,13 +82,13 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
         if len(img_src_values) > 0 :
             print "Operating on " + cur_tree_file + ":\n"
             for src_image_path in img_src_values :
-                if not src_image_path.startswith('http://') :
+                if not src_image_path.startswith('http://') and not src_image_path.startswith('//') and not src_image_path.startswith('https://'):
                     if not src_image_path in replace_queue :
                         print "Replacing " + src_image_path
                         new_filestring = read_input_prefill('New img src : ',
                                                             guess_new_imagepath(src_image_path,
                                                                                 media_server_url,
-                                                                                subdir_string)
+                                                                                subdir_string + cur_tree_location)
                                                             )
                         replace_queue[src_image_path] = new_filestring
 
@@ -91,9 +100,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                         copy_source = read_input_prefill('Copy Source : ',
                                                          re.sub('/{2,}',
                                                                 '/',
-                                                                source_image_root +
-                                                                '/' +
-                                                                subdir_string +
+                                                                subdir_string + cur_tree_location +
                                                                 '/' +
                                                                 src_image_path
                                                                 )
@@ -101,8 +108,6 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                         copy_target = read_input_prefill('Copy Dest : ',
                                                          re.sub('/{2,}',
                                                                 '/',
-                                                                target_image_root +
-                                                                '/' +
                                                                 subdir_string +
                                                                 '/' +
                                                                 re.sub(re.escape(media_server_url),
@@ -112,19 +117,25 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                                                 )
                                                          )
                         copy_queue[copy_source] = copy_target
+
         # Replace old paths with new in HTML/PHP file.
         print "Replacing all In : " + full_treeitem_filepath
         with open(full_treeitem_filepath, 'w') as html_file:
-            # 
-            file_as_string = file_as_string.replace('@ include', 'include')
             for old_string, new_string in replace_queue.iteritems():
                 file_as_string = file_as_string.replace(old_string, new_string)
             html_file.write(file_as_string)
             html_file.close()
-#        # Copy image files with new names to new location.
-#        for source_filepath, destination_filepath in copy_queue.iteritems():
-#            dstdir =  os.path.dirname(destination_filepath)
-#            if not os.path.isdir(dstdir):
-#                os.makedirs(dstdir)
-#            shutil.copy(source_filepath, dstdir)
 
+        for copy_source, copy_target in copy_queue.items():
+            print copy_source
+            script_file.write("cp --parents .{0} {1}\n".format(copy_source, temp_filepath_on_eclipse))
+            script_file.write("cd {0}\n".format(temp_filepath_on_eclipse))
+            script_file.write("mkdir -p .{0}\n".format(os.path.dirname(copy_target)))
+            script_file.write("mv .{0} .{1}\n".format(copy_source, copy_target))
+
+
+script_file.write("cd {0}\n".format(temp_filepath_on_eclipse))
+script_file.write("cd ..\n")
+script_file.write("mv migrate-to-media htdocs\n")
+script_file.write("tar cvzpf /tmp/media-transfer.tar.gz htdocs")
+script_file.close()
