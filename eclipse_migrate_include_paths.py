@@ -29,7 +29,7 @@ def guess_new_includepath(include_path):
     return include_path
 
 
-tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/admintools'
+tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/CLCC3'
 
 regex_to_find_paths = re.compile(r'include.*[\'\"](.*)[\'\"].*;')
 replace_queue = {}
@@ -43,6 +43,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
         html_file.close()
         # Extract path values from file
         for (pathval) in re.findall(regex_to_find_paths, file_as_string):
+            print pathval
             if not pathval.startswith('/srv/www/lib.unb.ca/htdocs/'):
                 if not pathval in replace_queue :
                     print "Replacing " + pathval
