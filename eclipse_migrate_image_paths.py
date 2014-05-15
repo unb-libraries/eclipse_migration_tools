@@ -150,17 +150,18 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                             )
                         copy_queue[copy_source] = copy_target
 
-        # Replace old paths with new in HTML/PHP file.
+        # If there are changes needed, open and write the file.
+        #
         file_as_string = file_as_string.decode('utf-8')
-        print "Replacing all In : " + full_treeitem_filepath
-        with open(full_treeitem_filepath, 'w') as html_file:
-            file_needs_write = False
-            for old_string, new_string in replace_queue.iteritems():
+        file_needs_write = False
+        for old_string, new_string in replace_queue.iteritems():
+            if not new_string is '' or not old_string is '':
                 if old_string in file_as_string:
-                    if not new_string is '' or not old_string is '':
-                        file_as_string = file_as_string.replace(old_string, new_string)
-                        file_needs_write = True
-            if file_needs_write:
+                    print "Replacing contents in : " + full_treeitem_filepath
+                    file_as_string = file_as_string.replace(old_string, new_string)
+                    file_needs_write = True
+        if file_needs_write:
+            with open(full_treeitem_filepath, 'w') as html_file:
                 html_file.write(file_as_string.encode('utf-8'))
                 html_file.close()
 
