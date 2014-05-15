@@ -84,7 +84,7 @@ on_eclipse_uri_prefixes = (
 
 replace_queue = {}
 
-script_file = open("copyset-migrate" + subdir_string.replace('/', '') + "-css-files-to-media.sh", "wb")
+script_file = open("copyset-migrate-" + subdir_string.replace('/', '') + "-css-files-to-media.sh", "wb")
 temp_filepath_on_eclipse = '/tmp'
 temp_dir_string = 'migrate' + subdir_string.replace('/', '') + '-css-to-media'
 script_file.write("rm -rf {0}/{1}\n".format(temp_filepath_on_eclipse,temp_dir_string))

@@ -73,7 +73,7 @@ tag_uri_tuples_to_ignore = (
 
 replace_queue = {}
 
-script_file = open("copyset-migrate" + subdir_string.replace('/', '') + "-img-to-media.sh", "wb")
+script_file = open("copyset-migrate-" + subdir_string.replace('/', '') + "-img-to-media.sh", "wb")
 temp_filepath_on_eclipse = '/tmp'
 temp_dir_string = 'migrate' + subdir_string.replace('/', '') + '-img-to-media'
 script_file.write("rm -rf {0}/{1}\n".format(temp_filepath_on_eclipse,temp_dir_string))
