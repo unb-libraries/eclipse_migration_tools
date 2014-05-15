@@ -60,9 +60,16 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
     return new_imagepath_guess
 
 
-tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/archives'
-subdir_string = '/archives'
+tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/commons'
+subdir_string = '/commons'
 media_server_url = '//media.lib.unb.ca'
+
+tag_uri_tuples_to_ignore = (
+    '//media.lib.unb.ca',
+    'http://maps.google.com',
+    "'http://blogs.unb.ca/iss",
+    "http://www.unb.ca/"
+)
 
 replace_queue = {}
 
@@ -89,62 +96,59 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
         if len(raw_img_src_values) > 0 :
             print "Operating on " + subdir_string + '/' + cur_tree_location + '/' + cur_tree_file + ":\n"
             for cur_raw_img_src_value in raw_img_src_values :
-                src_image_tag = BeautifulSoup(cur_raw_img_src_value).img
-                if not src_image_tag['src'].startswith('//media.lib.unb.ca'):
-                    if not src_image_tag['src'].startswith('http://maps.google.com')\
-                            and not src_image_tag['src'].startswith("'http://blogs.unb.ca/iss")\
-                            and not src_image_tag['src'].startswith("http://www.unb.ca/"):
-                        if not cur_raw_img_src_value in replace_queue :
-                            print "Replacing " + cur_raw_img_src_value
-                            new_filestring = read_input_prefill(
-                                'New img src : ',
-                                media_server_url + guess_new_imagepath(
-                                    src_image_tag['src'],
-                                    media_server_url,
-                                    subdir_string + cur_tree_location
-                                )
+                src_image_tag = BeautifulSoup(cur_raw_img_src_value).IMG
+                if not src_image_tag['src'].startswith(tag_uri_tuples_to_ignore):
+                    if not cur_raw_img_src_value in replace_queue :
+                        print "Replacing " + cur_raw_img_src_value
+                        new_filestring = read_input_prefill(
+                            'New img src : ',
+                            media_server_url + guess_new_imagepath(
+                                src_image_tag['src'],
+                                media_server_url,
+                                subdir_string + cur_tree_location
                             )
-                            replace_queue[cur_raw_img_src_value] = str(
-                                cur_raw_img_src_value.replace(
-                                    src_image_tag['src'],
-                                    new_filestring
-                                )
+                        )
+                        replace_queue[cur_raw_img_src_value] = str(
+                            cur_raw_img_src_value.replace(
+                                src_image_tag['src'],
+                                new_filestring
                             )
+                        )
 
-                            src_image_path = src_image_tag['src']
-                            if subdir_string in src_image_path :
-                                src_image_path = re.sub(subdir_string, '', src_image_path)
-                            if subdir_string in new_filestring :
-                                new_filestring = re.sub(subdir_string, '', new_filestring)
+                        src_image_path = src_image_tag['src']
+                        if subdir_string in src_image_path :
+                            src_image_path = re.sub(subdir_string, '', src_image_path)
+                        if subdir_string in new_filestring :
+                            new_filestring = re.sub(subdir_string, '', new_filestring)
 
-                            if not src_image_path.startswith('http://'):
-                                original_source = subdir_string + cur_tree_location + '/' + src_image_path
-                                copy_source = read_input_prefill(
-                                    'Original Source : ',
-                                    re.sub('/{2,}','',original_source.replace('/./','/'))
-                                )
-                                copy_target = read_input_prefill(
-                                    'New Dest : ',
-                                    re.sub(
-                                        '/{2,}',
-                                        '/',
-                                        subdir_string + '/' + guess_new_imagepath(
-                                            src_image_path,
-                                            media_server_url,
-                                            cur_tree_location
-                                        )
+                        if not src_image_path.startswith('http://'):
+                            original_source = subdir_string + cur_tree_location + '/' + src_image_path
+                            copy_source = read_input_prefill(
+                                'Original Source : ',
+                                re.sub('/{2,}','',original_source.replace('/./','/'))
+                            )
+                            copy_target = read_input_prefill(
+                                'New Dest : ',
+                                re.sub(
+                                    '/{2,}',
+                                    '/',
+                                    subdir_string + '/' + guess_new_imagepath(
+                                        src_image_path,
+                                        media_server_url,
+                                        cur_tree_location
                                     )
                                 )
-                            else:
-                                copy_source = read_input_prefill(
-                                    'Original Source : ',
-                                    urlparse(src_image_path).path
-                                )
-                                copy_target = read_input_prefill(
-                                    'New Dest : ',
-                                    guess_new_imagepath(urlparse(src_image_path).path,  media_server_url, '')
-                                )
-                            copy_queue[copy_source] = copy_target
+                            )
+                        else:
+                            copy_source = read_input_prefill(
+                                'Original Source : ',
+                                urlparse(src_image_path).path
+                            )
+                            copy_target = read_input_prefill(
+                                'New Dest : ',
+                                guess_new_imagepath(urlparse(src_image_path).path,  media_server_url, '')
+                            )
+                        copy_queue[copy_source] = copy_target
 
         # Replace old paths with new in HTML/PHP file.
         file_as_string = file_as_string.decode('utf-8')
