@@ -154,11 +154,15 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
         file_as_string = file_as_string.decode('utf-8')
         print "Replacing all In : " + full_treeitem_filepath
         with open(full_treeitem_filepath, 'w') as html_file:
+            file_needs_write = False
             for old_string, new_string in replace_queue.iteritems():
-                if not new_string is '' or not old_string is '':
-                    file_as_string = file_as_string.replace(old_string, new_string)
-            html_file.write(file_as_string.encode('utf-8'))
-            html_file.close()
+                if old_string in file_as_string:
+                    if not new_string is '' or not old_string is '':
+                        file_as_string = file_as_string.replace(old_string, new_string)
+                        file_needs_write = True
+            if file_needs_write:
+                html_file.write(file_as_string.encode('utf-8'))
+                html_file.close()
 
         for copy_source, copy_target in copy_queue.items():
             if not copy_source is '' or not copy_target is '':
