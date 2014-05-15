@@ -119,7 +119,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                 )
                                 copy_target = read_input_prefill(
                                     'New Dest : ',
-                                    new_filestring
+                                    new_filestring.replace(media_server_url, '')
                                 )
                             else:
                                 original_source = subdir_string + cur_tree_location + '/' + cur_css_url_value
