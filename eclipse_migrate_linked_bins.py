@@ -102,6 +102,10 @@ on_eclipse_uri_prefixes = (
     'https://dev.hil.unb.ca/',
     'http://eclipse.hil.unb.ca/',
     'https://eclipse.hil.unb.ca/',
+    'http://www.dev.hil.unb.ca/',
+    'https://www.dev.hil.unb.ca/',
+    'http://www.eclipse.hil.unb.ca/',
+    'https://www.eclipse.hil.unb.ca/',
 )
 
 
