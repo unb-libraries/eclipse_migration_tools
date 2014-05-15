@@ -11,6 +11,7 @@
 #    the new location and filenames.
 #
 from bs4 import BeautifulSoup
+from migration_tools_paths import *
 import os
 import re
 import readline
@@ -60,8 +61,6 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
     return new_imagepath_guess
 
 
-tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/225'
-subdir_string = '/225'
 media_server_url = '//media.lib.unb.ca'
 
 tag_uri_tuples_to_ignore = (
