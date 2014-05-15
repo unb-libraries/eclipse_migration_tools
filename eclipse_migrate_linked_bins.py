@@ -138,7 +138,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                 cur_a_href_value = BeautifulSoup(cur_raw_a_tag_value).a['href']
                 print "Link " + cur_a_href_value
                 if cur_a_href_value.lower().endswith(media_bins_suffixes):
-                    if not cur_a_href_value.startswith('http') or cur_a_href_value.startswith(on_eclipse_uri_prefixes):
+                    if not cur_a_href_value.startswith(('http', '//')) or cur_a_href_value.startswith(on_eclipse_uri_prefixes):
                         print "Replacing " + cur_raw_a_tag_value
                         new_filestring = read_input_prefill(
                             'New img src : ',

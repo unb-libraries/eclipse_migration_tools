@@ -60,12 +60,12 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
     return new_imagepath_guess
 
 
-tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/commons'
-subdir_string = '/commons'
+tree_to_walk = '/home/jsanford/gitDev/lib.unb.ca-webtree/225'
+subdir_string = '/225'
 media_server_url = '//media.lib.unb.ca'
 
 tag_uri_tuples_to_ignore = (
-    '//media.lib.unb.ca',
+    '//',
     'http://maps.google.com',
     "'http://blogs.unb.ca/iss",
     "http://www.unb.ca/"
