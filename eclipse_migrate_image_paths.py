@@ -75,7 +75,7 @@ replace_queue = {}
 
 script_file = open("copyset-migrate" + subdir_string.replace('/', '') + "-img-to-media.sh", "wb")
 temp_filepath_on_eclipse = '/tmp'
-temp_dir_string = 'migrate-to-media'
+temp_dir_string = 'migrate' + subdir_string.replace('/', '') + '-img-to-media'
 script_file.write("rm -rf {0}/{1}\n".format(temp_filepath_on_eclipse,temp_dir_string))
 script_file.write("rm -rf {0}/htdocs\n".format(temp_filepath_on_eclipse))
 script_file.write("mkdir {0}/{1}\n".format(temp_filepath_on_eclipse,temp_dir_string))
@@ -170,6 +170,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
 
 script_file.write("find {0}/{1} -type d -depth -empty -exec rmdir \"{{}}\" \;\n".format(temp_filepath_on_eclipse,temp_dir_string))
 script_file.write("cd {0}\n".format(temp_filepath_on_eclipse))
-script_file.write("mv migrate-to-media htdocs\n")
-script_file.write("tar cvzpf /tmp/media-transfer.tar.gz htdocs")
+script_file.write("mv " + temp_dir_string + " htdocs\n")
+script_file.write("tar cvzpf /tmp/" + subdir_string.replace('/', '') + "-img-transfer.tar.gz htdocs\n")
+script_file.write("scp /tmp/" + subdir_string.replace('/', '') + "-img-transfer.tar.gz gorgon:/var/www/media.lib.unb.ca/\n")
 script_file.close()

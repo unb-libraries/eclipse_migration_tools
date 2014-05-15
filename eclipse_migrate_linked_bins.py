@@ -214,6 +214,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
 
 script_file.write("find {0}/{1} -type d -depth -empty -exec rmdir \"{{}}\" \;\n".format(temp_filepath_on_eclipse,temp_dir_string))
 script_file.write("cd {0}\n".format(temp_filepath_on_eclipse))
-script_file.write("mv " + temp_dir_string + "htdocs\n")
-script_file.write("tar cvzpf /tmp/" + subdir_string.replace('/', '') + "-bins-transfer.tar.gz htdocs")
+script_file.write("mv " + temp_dir_string + " htdocs\n")
+script_file.write("tar cvzpf /tmp/" + subdir_string.replace('/', '') + "-bins-transfer.tar.gz htdocs\n")
+script_file.write("scp /tmp/" + subdir_string.replace('/', '') + "-bins-transfer.tar.gz gorgon:/var/www/media.lib.unb.ca/\n")
 script_file.close()
