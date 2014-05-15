@@ -180,6 +180,8 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                 html_file.write(file_as_string.encode('utf-8'))
                 html_file.close()
 
+        # Write out steps to copy binaries referenced in this file to a location for archiving.
+        #
         for copy_source, copy_target in copy_queue.items():
             if not copy_source is '' or not copy_target is '':
                 script_file.write("cd /www\n")
@@ -188,6 +190,8 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                 script_file.write("mkdir -p .{0}\n".format(os.path.dirname(copy_target)))
                 script_file.write("mv .{0} .{1}\n".format(copy_source, copy_target))
 
+# Write out steps to clean up temporary location, tar up contents, and copy the tarball to gorgon.
+#
 script_file.write("find {0}/{1} -type d -depth -empty -exec rmdir \"{{}}\" \;\n".format(temp_filepath_on_eclipse,temp_dir_string))
 script_file.write("cd {0}\n".format(temp_filepath_on_eclipse))
 script_file.write("mv " + temp_dir_string + " htdocs\n")
