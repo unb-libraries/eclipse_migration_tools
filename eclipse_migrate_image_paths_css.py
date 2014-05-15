@@ -110,38 +110,42 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                         )
                     )
 
-                    src_image_path = cur_css_url_value
-                    if subdir_string in src_image_path :
-                        src_image_path = re.sub(subdir_string, '', src_image_path)
-                    if subdir_string in new_filestring :
-                        new_filestring = re.sub(subdir_string, '', new_filestring)
-
-                    if not src_image_path.startswith('http://'):
-                        original_source = subdir_string + cur_tree_location + '/' + src_image_path
-                        copy_source = read_input_prefill(
-                            'Original Source : ',
-                            re.sub('/{2,}','',original_source.replace('/./','/'))
-                        )
-                        copy_target = read_input_prefill(
-                            'New Dest : ',
-                            re.sub(
-                                '/{2,}',
-                                '/',
-                                subdir_string + '/' + guess_new_imagepath(
-                                    src_image_path,
-                                    media_server_url,
-                                    cur_tree_location
+                    if not cur_css_url_value.startswith('http://'):
+                        if cur_css_url_value.startswith('/'):
+                            copy_source = read_input_prefill(
+                                'Original Source : ',
+                                cur_css_url_value
+                            )
+                            copy_target = read_input_prefill(
+                                'New Dest : ',
+                                new_filestring
+                            )
+                        else:
+                            original_source = subdir_string + cur_tree_location + '/' + cur_css_url_value
+                            copy_source = read_input_prefill(
+                                'Original Source : ',
+                                re.sub('/{2,}','',original_source.replace('/./','/'))
+                            )
+                            copy_target = read_input_prefill(
+                                'New Dest : ',
+                                re.sub(
+                                    '/{2,}',
+                                    '/',
+                                    subdir_string + '/' + guess_new_imagepath(
+                                        cur_css_url_value,
+                                        media_server_url,
+                                        cur_tree_location
+                                    )
                                 )
                             )
-                        )
                     else:
                         copy_source = read_input_prefill(
                             'Original Source : ',
-                            urlparse(src_image_path).path
+                            urlparse(cur_css_url_value).path
                         )
                         copy_target = read_input_prefill(
                             'New Dest : ',
-                            guess_new_imagepath(urlparse(src_image_path).path,  media_server_url, '')
+                            guess_new_imagepath(urlparse(cur_css_url_value).path,  media_server_url, '')
                         )
                     copy_queue[copy_source] = copy_target
 
