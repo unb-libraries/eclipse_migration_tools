@@ -69,7 +69,7 @@ media_server_url = '//media.lib.unb.ca'
 
 replace_queue = {}
 
-script_file = open("copyset-migrate-to-media.sh", "wb")
+script_file = open("copyset-migrate" + subdir_string.replace('/', '') + "-css-files-to-media.sh", "wb")
 temp_filepath_on_eclipse = '/tmp'
 temp_dir_string = 'migrate-to-media'
 script_file.write("rm -rf {0}/{1}\n".format(temp_filepath_on_eclipse,temp_dir_string))
