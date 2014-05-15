@@ -50,6 +50,9 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
         image_path = re.sub('http://dev.hil.unb.ca', '', image_path)
         slugged_path = slugify_path(unicode(image_path))
         return slugged_path
+    if image_path.startswith('/'):
+        slugged_path = slugify_path(unicode(image_path))
+        return slugged_path
     if image_path.startswith('./') :
         image_path = re.sub('./', '', image_path)
     if subdir_slug in image_path:
