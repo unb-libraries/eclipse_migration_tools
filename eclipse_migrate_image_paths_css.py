@@ -102,7 +102,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
         html_file.close()
 
         raw_css_url_values = []
-        raw_css_url_values.extend(re.findall(r"(url\(.*?\))", file_as_string))
+        raw_css_url_values.extend(re.findall(r"(url\(.*?\))", file_as_string, re.IGNORECASE))
 
         if len(raw_css_url_values) > 0 :
             print "Operating on " + subdir_string + '/' + cur_tree_location + '/' + cur_tree_file + ":\n"
