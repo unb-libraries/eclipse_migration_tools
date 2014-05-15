@@ -93,7 +93,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
             print "Operating on " + subdir_string + '/' + cur_tree_location + '/' + cur_tree_file + ":\n"
             for cur_raw_css_url_value in raw_css_url_values :
                 cur_css_url_value = cur_raw_css_url_value.replace('url(', '').replace(')', '')
-                if not cur_css_url_value.startwith('//media.lib.unb.ca'):
+                if not cur_css_url_value.startswith('//media.lib.unb.ca'):
                     if not cur_raw_css_url_value in replace_queue :
                         print "Replacing " + cur_raw_css_url_value
                         new_filestring = read_input_prefill(
