@@ -97,6 +97,8 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
         if len(raw_img_src_values) > 0 :
             print "Operating on " + subdir_string + '/' + cur_tree_location + '/' + cur_tree_file + ":\n"
             for cur_raw_img_src_value in raw_img_src_values :
+                cur_raw_img_src_value = cur_raw_img_src_value.replace("\r", "")
+                cur_raw_img_src_value = cur_raw_img_src_value.replace("\n", "")
                 if not '<?' in cur_raw_img_src_value and not '$' in cur_raw_img_src_value:
                     src_image_tag = BeautifulSoup(cur_raw_img_src_value).img
                     if not src_image_tag['src'].startswith(tag_uri_tuples_to_ignore):

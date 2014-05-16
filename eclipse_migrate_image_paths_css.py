@@ -106,6 +106,8 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
         if len(raw_css_url_values) > 0 :
             print "Operating on " + subdir_string + '/' + cur_tree_location + '/' + cur_tree_file + ":\n"
             for cur_raw_css_url_value in raw_css_url_values :
+                cur_raw_css_url_value = cur_raw_css_url_value.replace("\r", "")
+                cur_raw_css_url_value = cur_raw_css_url_value.replace("\n", "")
                 if not '<?' in cur_raw_css_url_value and not '$' in cur_raw_css_url_value and not cur_raw_css_url_value is '.*':
                     cur_css_url_value = cur_raw_css_url_value.replace('url("', '').replace("url('", '').replace('")', '').replace("')", '').replace('url(', '').replace(')', '')
                     if not cur_css_url_value.startswith(('http', '//')) or cur_css_url_value.startswith(on_eclipse_uri_prefixes):
