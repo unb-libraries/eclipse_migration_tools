@@ -128,7 +128,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
         html_file.close()
 
         raw_a_tag_values = []
-        raw_a_tag_values.extend(re.findall(r"(\<a .*?\>)", file_as_string,  re.IGNORECASE | re.MULTILINE | re.DOTALL))
+        raw_a_tag_values.extend(re.findall(r"(\<a.*?\>)", file_as_string,  re.IGNORECASE | re.MULTILINE | re.DOTALL))
 
         if len(raw_a_tag_values) > 0 :
             print "Operating on " + subdir_string + '/' + cur_tree_location + '/' + cur_tree_file + ":\n"
