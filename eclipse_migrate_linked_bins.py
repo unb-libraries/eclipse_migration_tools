@@ -139,7 +139,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                         if not cur_a_href_value.startswith(('http', '//')) or cur_a_href_value.startswith(on_eclipse_uri_prefixes):
                             print "Replacing " + cur_raw_a_tag_value
                             new_filestring = read_input_prefill(
-                                'New img src : ',
+                                'New img src (Enter nothing to skip) : ',
                                 media_server_url + guess_new_imagepath(
                                     cur_a_href_value,
                                     media_server_url,
@@ -153,51 +153,54 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                 )
                             )
 
-                            if not cur_a_href_value.startswith('http://'):
-                                if cur_a_href_value.startswith('/'):
-                                    copy_source = read_input_prefill(
-                                        'Original Source : ',
-                                        cur_a_href_value
-                                    )
-                                    copy_target = read_input_prefill(
-                                        'New Dest : ',
-                                        new_filestring.replace(media_server_url, '')
-                                    )
-                                else:
-                                    original_source = subdir_string + cur_tree_location + '/' + cur_a_href_value
-                                    copy_source = read_input_prefill(
-                                        'Original Source : ',
-                                        re.sub('/{2,}','',original_source.replace('/./','/'))
-                                    )
-                                    copy_target = read_input_prefill(
-                                        'New Dest : ',
-                                        re.sub(
-                                            '/{2,}',
-                                            '/',
-                                            subdir_string + '/' + guess_new_imagepath(
-                                                cur_a_href_value,
-                                                media_server_url,
-                                                cur_tree_location
+                            # Do not proceed any further if '' was received as new_filestring:
+                            #
+                            if not new_filestring is '':
+                                if not cur_a_href_value.startswith('http://'):
+                                    if cur_a_href_value.startswith('/'):
+                                        copy_source = read_input_prefill(
+                                            'Original Source : ',
+                                            cur_a_href_value
+                                        )
+                                        copy_target = read_input_prefill(
+                                            'New Dest : ',
+                                            new_filestring.replace(media_server_url, '')
+                                        )
+                                    else:
+                                        original_source = subdir_string + cur_tree_location + '/' + cur_a_href_value
+                                        copy_source = read_input_prefill(
+                                            'Original Source : ',
+                                            re.sub('/{2,}','',original_source.replace('/./','/'))
+                                        )
+                                        copy_target = read_input_prefill(
+                                            'New Dest : ',
+                                            re.sub(
+                                                '/{2,}',
+                                                '/',
+                                                subdir_string + '/' + guess_new_imagepath(
+                                                    cur_a_href_value,
+                                                    media_server_url,
+                                                    cur_tree_location
+                                                )
                                             )
                                         )
+                                else:
+                                    copy_source = read_input_prefill(
+                                        'Original Source : ',
+                                        urlparse(cur_a_href_value).path
                                     )
-                            else:
-                                copy_source = read_input_prefill(
-                                    'Original Source : ',
-                                    urlparse(cur_a_href_value).path
-                                )
-                                copy_target = read_input_prefill(
-                                    'New Dest : ',
-                                    guess_new_imagepath(urlparse(cur_a_href_value).path,  media_server_url, '')
-                                )
-                            copy_queue[copy_source] = copy_target
+                                    copy_target = read_input_prefill(
+                                        'New Dest : ',
+                                        guess_new_imagepath(urlparse(cur_a_href_value).path,  media_server_url, '')
+                                    )
+                                copy_queue[copy_source] = copy_target
 
         # If there are changes needed, open and write the file.
         #
         file_as_string = file_as_string.decode('utf-8')
         file_needs_write = False
         for old_string, new_string in replace_queue.iteritems():
-            if not new_string is '' or not old_string is '':
+            if not new_string is '':
                 if old_string in file_as_string:
                     print "Replacing contents in : " + full_treeitem_filepath
                     file_as_string = file_as_string.replace(old_string, new_string)
