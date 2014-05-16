@@ -44,19 +44,19 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
     Guess at the desired 'new' path for image binaries, based on convoluted mess.
     """
     if image_path.startswith('http://lib.unb.ca/'):
-        image_path = re.sub('http://lib.unb.ca', '', image_path)
+        image_path = image_path.replace('http://lib.unb.ca', '')
         slugged_path = slugify_path(unicode(image_path))
         return slugged_path
     if image_path.startswith('http://dev.hil.unb.ca/'):
-        image_path = re.sub('http://dev.hil.unb.ca', '', image_path)
+        image_path = image_path.replace('http://dev.hil.unb.ca', '')
         slugged_path = slugify_path(unicode(image_path))
         return slugged_path
     if image_path.startswith('/') :
         return slugify_path(unicode(image_path))
     if image_path.startswith('./') :
-        image_path = image_path.replace('./','')
+        image_path = image_path.replace('./', '')
     if subdir_slug in image_path:
-        image_path = re.sub(subdir_slug, '', image_path)
+        image_path = image_path.replace(subdir_slug, '')
     slugged_path = slugify_path(unicode(image_path))
     new_imagepath_guess = subdir_slug + '/' + slugged_path
     new_imagepath_guess = re.sub('(?<!http:)/{2,}', '/', new_imagepath_guess)
