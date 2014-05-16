@@ -123,7 +123,20 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                             if subdir_string in new_filestring :
                                 new_filestring = re.sub(subdir_string, '', new_filestring)
 
-                            if not src_image_path.startswith('http://'):
+                            if src_image_tag['src'].startswith('/'):
+                                copy_source = read_input_prefill(
+                                    'Original Source : ',
+                                    src_image_tag['src'].replace('./','')
+                                )
+                                copy_target = read_input_prefill(
+                                    'New Dest : ',
+                                    guess_new_imagepath(
+                                        src_image_tag['src'],
+                                        media_server_url,
+                                        subdir_string + cur_tree_location
+                                    )
+                                )
+                            elif not src_image_path.startswith('http://'):
                                 original_source = subdir_string + cur_tree_location + '/' + src_image_path
                                 copy_source = read_input_prefill(
                                     'Original Source : ',
