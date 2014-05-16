@@ -92,7 +92,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
         html_file.close()
 
         raw_img_src_values = []
-        raw_img_src_values.extend(re.findall(r"\<img.*?\>", file_as_string, re.IGNORECASE))
+        raw_img_src_values.extend(re.findall(r"\<img.*?\>", file_as_string, re.IGNORECASE | re.MULTILINE | re.DOTALL))
 
         if len(raw_img_src_values) > 0 :
             print "Operating on " + subdir_string + '/' + cur_tree_location + '/' + cur_tree_file + ":\n"
