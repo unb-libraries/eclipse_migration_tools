@@ -110,12 +110,16 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                     subdir_string + cur_tree_location
                                 )
                             )
-                            replace_queue[cur_raw_img_src_value] = str(
-                                cur_raw_img_src_value.replace(
-                                    src_image_tag['src'],
-                                    new_filestring
+
+                            if new_filestring is '':
+                                replace_queue[cur_raw_img_src_value] = ''
+                            else :
+                                replace_queue[cur_raw_img_src_value] = str(
+                                    cur_raw_img_src_value.replace(
+                                        src_image_tag['src'],
+                                        new_filestring
+                                    )
                                 )
-                            )
 
                             # Do not proceed any further if '' was received as new_filestring:
                             #
