@@ -133,8 +133,9 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
         if len(raw_a_tag_values) > 0 :
             print "Operating on " + subdir_string + '/' + cur_tree_location + '/' + cur_tree_file + ":\n"
             for cur_raw_a_tag_value in raw_a_tag_values :
-                cur_raw_a_tag_value = cur_raw_a_tag_value.replace("\r", "")
-                cur_raw_a_tag_value = cur_raw_a_tag_value.replace("\n", "")
+                cur_raw_a_tag_value_orig = cur_raw_a_tag_value
+                cur_raw_a_tag_value = cur_raw_a_tag_value.replace("\r", "").replace("\n", "")
+
                 if 'href' in cur_raw_a_tag_value and not '<?' in cur_raw_a_tag_value and not ' $' in cur_raw_a_tag_value:
                     cur_a_href_value = BeautifulSoup(cur_raw_a_tag_value).a['href']
                     if cur_a_href_value.lower().endswith(media_bins_suffixes):
@@ -150,9 +151,9 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                             )
 
                             if new_filestring is '':
-                                replace_queue[cur_raw_a_tag_value] = ''
+                                replace_queue[cur_raw_a_tag_value_orig] = ''
                             else :
-                                replace_queue[cur_raw_a_tag_value] = str(
+                                replace_queue[cur_raw_a_tag_value_orig] = str(
                                     cur_raw_a_tag_value.replace(
                                         cur_a_href_value,
                                         new_filestring
