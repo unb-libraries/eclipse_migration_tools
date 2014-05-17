@@ -134,7 +134,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
             print "Operating on " + subdir_string + '/' + cur_tree_location + '/' + cur_tree_file + ":\n"
             for cur_raw_a_tag_value in raw_a_tag_values :
                 cur_raw_a_tag_value_orig = cur_raw_a_tag_value
-                cur_raw_a_tag_value = cur_raw_a_tag_value.replace("\r", "").replace("\n", "")
+                cur_raw_a_tag_value = cur_raw_a_tag_value.replace("\r", " ").replace("\n", " ")
 
                 if 'href' in cur_raw_a_tag_value and not '<?' in cur_raw_a_tag_value and not ' $' in cur_raw_a_tag_value:
                     cur_a_href_value = BeautifulSoup(cur_raw_a_tag_value).a['href']

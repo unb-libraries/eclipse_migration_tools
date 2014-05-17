@@ -98,7 +98,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
             print "Operating on " + subdir_string + '/' + cur_tree_location + '/' + cur_tree_file + ":\n"
             for cur_raw_img_src_value in raw_img_src_values :
                 cur_raw_img_src_value_orig = cur_raw_img_src_value
-                cur_raw_img_src_value = cur_raw_img_src_value.replace("\r", "").replace("\n", "")
+                cur_raw_img_src_value = cur_raw_img_src_value.replace("\r", " ").replace("\n", " ")
 
                 if not '<?' in cur_raw_img_src_value and not '$' in cur_raw_img_src_value:
                     src_image_tag = BeautifulSoup(cur_raw_img_src_value).img
