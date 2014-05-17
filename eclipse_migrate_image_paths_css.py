@@ -47,6 +47,10 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
         image_path = image_path.replace('http://lib.unb.ca', '')
         slugged_path = slugify_path(unicode(image_path))
         return slugged_path
+    if image_path.startswith('http://www.lib.unb.ca/'):
+        image_path = image_path.replace('http://www.lib.unb.ca', '')
+        slugged_path = slugify_path(unicode(image_path))
+        return slugged_path
     if image_path.startswith('http://dev.hil.unb.ca/'):
         image_path = image_path.replace('http://dev.hil.unb.ca', '')
         slugged_path = slugify_path(unicode(image_path))
