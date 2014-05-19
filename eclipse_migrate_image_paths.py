@@ -143,7 +143,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                 if src_image_tag['src'].startswith('/'):
                                     copy_source = read_input_prefill(
                                         'Original Source : ',
-                                        src_image_tag['src'].replace('./','').replace('%20', '\ ')
+                                        src_image_tag['src'].replace('./','').replace('%20', ' ')
                                     )
                                     copy_target = read_input_prefill(
                                         'New Dest : ',
@@ -157,7 +157,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                     original_source = subdir_string + cur_tree_location + '/' + src_image_path
                                     copy_source = read_input_prefill(
                                         'Original Source : ',
-                                        re.sub('/{2,}','',original_source.replace('/./','/')).replace('%20', '\ ')
+                                        re.sub('/{2,}','',original_source.replace('/./','/')).replace('%20', ' ')
                                     )
                                     copy_target = read_input_prefill(
                                         'New Dest : ',
@@ -174,7 +174,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                 else:
                                     copy_source = read_input_prefill(
                                         'Original Source : ',
-                                        urlparse(src_image_path).path.replace('%20', '\ ')
+                                        urlparse(src_image_path).path.replace('%20', ' ')
                                     )
                                     copy_target = read_input_prefill(
                                         'New Dest : ',
@@ -204,10 +204,10 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                 script_file.write("cd /www\n")
                 script_file.write("if [ -f \".{0}\" ]\n".format(copy_source))
                 script_file.write("then\n")
-                script_file.write("    cp --parents .{0} {1}/{2}\n".format(copy_source, temp_filepath_on_eclipse,temp_dir_string))
-                script_file.write("    cd {0}/{1}\n".format(temp_filepath_on_eclipse,temp_dir_string))
-                script_file.write("    mkdir -p .{0}\n".format(os.path.dirname(copy_target)))
-                script_file.write("    mv .{0} .{1}\n".format(copy_source, copy_target))
+                script_file.write("    cp --parents \".{0}\" \"{1}/{2}\"\n".format(copy_source, temp_filepath_on_eclipse,temp_dir_string))
+                script_file.write("    cd \"{0}/{1}\"\n".format(temp_filepath_on_eclipse,temp_dir_string))
+                script_file.write("    mkdir -p \".{0}\"\n".format(os.path.dirname(copy_target)))
+                script_file.write("    mv \".{0}\" \".{1}\"\n".format(copy_source, copy_target))
                 script_file.write("else\n")
                 script_file.write("	echo \".{0}\" >> missing_files_from_move.txt\n".format(copy_source))
                 script_file.write("fi\n")
