@@ -104,7 +104,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                 cur_raw_img_src_value_orig = cur_raw_img_src_value
                 cur_raw_img_src_value = cur_raw_img_src_value.replace("\r", " ").replace("\n", " ")
 
-                if not '<?' in cur_raw_img_src_value and not '$' in cur_raw_img_src_value:
+                if not '<?' in cur_raw_img_src_value and not '$' in cur_raw_img_src_value and not cur_raw_img_src_value.count('\\') > 3:
                     src_image_tag = BeautifulSoup(cur_raw_img_src_value).img
                     if not src_image_tag['src'].startswith(tag_uri_tuples_to_ignore):
                         if not cur_raw_img_src_value in replace_queue :

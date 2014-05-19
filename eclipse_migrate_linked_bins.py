@@ -140,7 +140,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                 cur_raw_a_tag_value_orig = cur_raw_a_tag_value
                 cur_raw_a_tag_value = cur_raw_a_tag_value.replace("\r", " ").replace("\n", " ")
 
-                if 'href' in cur_raw_a_tag_value and not '<?' in cur_raw_a_tag_value and not ' $' in cur_raw_a_tag_value:
+                if 'href' in cur_raw_a_tag_value and not '<?' in cur_raw_a_tag_value and not ' $' in cur_raw_a_tag_value and not cur_raw_img_src_value.count('\\') > 3:
                     cur_a_href_value = BeautifulSoup(cur_raw_a_tag_value).a['href']
                     if cur_a_href_value.lower().endswith(media_bins_suffixes):
                         if not cur_a_href_value.startswith(('http', '//')) or cur_a_href_value.startswith(on_eclipse_uri_prefixes):

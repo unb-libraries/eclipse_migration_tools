@@ -113,7 +113,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                 cur_raw_css_url_value_orig = cur_raw_css_url_value
                 cur_raw_css_url_value = cur_raw_css_url_value.replace("\r", " ").replace("\n", " ")
 
-                if not '<?' in cur_raw_css_url_value and not '$' in cur_raw_css_url_value and not cur_raw_css_url_value is '.*':
+                if not '<?' in cur_raw_css_url_value and not '$' in cur_raw_css_url_value and not cur_raw_css_url_value.count('\\') > 3:
                     cur_css_url_value = cur_raw_css_url_value.replace('url("', '').replace("url('", '').replace('")', '').replace("')", '').replace('url(', '').replace(')', '')
                     if not cur_css_url_value.startswith(('http', '//')) or cur_css_url_value.startswith(on_eclipse_uri_prefixes):
                         if not cur_raw_css_url_value in replace_queue:
