@@ -43,6 +43,7 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
     """
     Guess at the desired 'new' path for image binaries, based on convoluted mess.
     """
+    image_path = image_path.replace('%20', '_')
     if image_path.startswith('http://lib.unb.ca/'):
         image_path = image_path.replace('http://lib.unb.ca', '')
         slugged_path = slugify_path(unicode(image_path))
@@ -142,7 +143,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                 if src_image_tag['src'].startswith('/'):
                                     copy_source = read_input_prefill(
                                         'Original Source : ',
-                                        src_image_tag['src'].replace('./','')
+                                        src_image_tag['src'].replace('./','').replace('%20', '\ ')
                                     )
                                     copy_target = read_input_prefill(
                                         'New Dest : ',
@@ -156,7 +157,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                     original_source = subdir_string + cur_tree_location + '/' + src_image_path
                                     copy_source = read_input_prefill(
                                         'Original Source : ',
-                                        re.sub('/{2,}','',original_source.replace('/./','/'))
+                                        re.sub('/{2,}','',original_source.replace('/./','/')).replace('%20', '\ ')
                                     )
                                     copy_target = read_input_prefill(
                                         'New Dest : ',
@@ -173,7 +174,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                 else:
                                     copy_source = read_input_prefill(
                                         'Original Source : ',
-                                        urlparse(src_image_path).path
+                                        urlparse(src_image_path).path.replace('%20', '\ ')
                                     )
                                     copy_target = read_input_prefill(
                                         'New Dest : ',
