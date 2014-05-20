@@ -43,10 +43,10 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
         html_file.close()
 
         raw_img_src_values = []
-        raw_img_src_values.extend(re.findall(r"\<img.*?\>", file_as_string, re.ignorecase | re.multiline | re.dotall))
+        raw_img_src_values.extend(re.findall(r"\<img.*?\>", file_as_string, re.IGNORECASE | re.MULTILINE | re.DOTALL))
 
         if len(raw_img_src_values) > 0 :
-            print "operating on " + subdir_string + '/' + cur_tree_location + '/' + cur_tree_file + ":\n"
+            print "Operating on " + subdir_string + '/' + cur_tree_location + '/' + cur_tree_file + ":\n"
             for cur_raw_img_src_value in raw_img_src_values :
                 cur_raw_img_src_value_orig = cur_raw_img_src_value
                 cur_raw_img_src_value = cur_raw_img_src_value.replace("\r", " ").replace("\n", " ")
@@ -57,7 +57,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                         if not cur_raw_img_src_value in replace_queue :
                             print "replacing " + cur_raw_img_src_value
                             new_filestring = read_input_prefill(
-                                'new img src (enter nothing to skip) : ',
+                                'New img src (enter nothing to skip) : ',
                                 media_server_url + guess_new_imagepath(
                                     src_image_tag['src'],
                                     media_server_url,
@@ -86,11 +86,11 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
 
                                 if src_image_tag['src'].startswith('/'):
                                     copy_source = read_input_prefill(
-                                        'original source : ',
+                                        'Original source : ',
                                         src_image_tag['src'].replace('./','').replace('%20', ' ')
                                     )
                                     copy_target = read_input_prefill(
-                                        'new dest : ',
+                                        'New dest : ',
                                         guess_new_imagepath(
                                             src_image_tag['src'],
                                             media_server_url,
@@ -100,11 +100,11 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                 elif not src_image_path.startswith('http://'):
                                     original_source = subdir_string + cur_tree_location + '/' + src_image_path
                                     copy_source = read_input_prefill(
-                                        'original source : ',
+                                        'Original source : ',
                                         re.sub('/{2,}','',original_source.replace('/./','/')).replace('%20', ' ')
                                     )
                                     copy_target = read_input_prefill(
-                                        'new dest : ',
+                                        'New dest : ',
                                         re.sub(
                                             '/{2,}',
                                             '/',
@@ -117,11 +117,11 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                     )
                                 else:
                                     copy_source = read_input_prefill(
-                                        'original source : ',
+                                        'Original source : ',
                                         urlparse(src_image_path).path.replace('%20', ' ')
                                     )
                                     copy_target = read_input_prefill(
-                                        'new dest : ',
+                                        'New dest : ',
                                         guess_new_imagepath(urlparse(src_image_path).path,  media_server_url, '')
                                     )
                                 copy_queue[copy_source] = copy_target
