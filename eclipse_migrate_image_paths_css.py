@@ -123,6 +123,6 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                 copy_queue[copy_source] = copy_target
 
         write_tree_file_with_changes(file_as_string, replace_queue, full_treeitem_filepath)
-        write_copy_queue_to_script(copy_queue)
+        write_copy_queue_to_script(script_file_handle, copy_queue)
 
 write_copy_script_outro(script_file_handle, subdir_string)
