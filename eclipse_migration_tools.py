@@ -60,9 +60,9 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
 
 def write_copy_script_intro(script_file_handle, subdir_string, temp_filepath_on_eclipse = '/tmp'):
     temp_dir_string = 'migrate' + subdir_string.replace('/', '') + '-img-to-media'
-    script_file_handle("rm -rf {0}/{1}\n".format(temp_filepath_on_eclipse,temp_dir_string))
-    script_file_handle("rm -rf {0}/htdocs\n".format(temp_filepath_on_eclipse))
-    script_file_handle("mkdir {0}/{1}\n".format(temp_filepath_on_eclipse,temp_dir_string))
+    script_file_handle.write("rm -rf {0}/{1}\n".format(temp_filepath_on_eclipse,temp_dir_string))
+    script_file_handle.write("rm -rf {0}/htdocs\n".format(temp_filepath_on_eclipse))
+    script_file_handle.write("mkdir {0}/{1}\n".format(temp_filepath_on_eclipse,temp_dir_string))
 
 def write_copy_queue_to_script(script_file_handle, copy_queue, temp_filepath_on_eclipse = '/tmp'):
     temp_dir_string = 'migrate' + subdir_string.replace('/', '') + '-img-to-media'
