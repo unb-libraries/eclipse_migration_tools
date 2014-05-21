@@ -12,6 +12,7 @@
 #
 from bs4 import BeautifulSoup
 from eclipse_migration_tools import *
+from optparse import OptionParser
 import os
 import re
 from urlparse import urlparse
@@ -58,6 +59,10 @@ on_eclipse_uri_prefixes = (
 )
 replace_queue = {}
 
+parser = OptionParser()
+parser.add_option('-a', '--auto-process', dest='auto_process', default=False, help='Process without input.', action='store_true')
+(options, args) = parser.parse_args()
+
 # Open script used to copy migrated files out of the eclipse tree
 #
 script_file_handle = open("copyset-migrate-" + subdir_string.replace('/', '') + "-bins-to-media.sh", "wb")
@@ -87,14 +92,21 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                     if cur_a_href_value.lower().endswith(media_bins_suffixes):
                         if not cur_a_href_value.startswith(('http', '//')) or cur_a_href_value.startswith(on_eclipse_uri_prefixes):
                             print "Replacing " + cur_raw_a_tag_value
-                            new_filestring = read_input_prefill(
-                                'New img src (Enter nothing to skip) : ',
-                                media_server_url + guess_new_imagepath(
+                            if options.auto_process is True:
+                                new_filestring = media_server_url + guess_new_imagepath(
                                     cur_a_href_value,
                                     media_server_url,
                                     subdir_string + cur_tree_location
                                 )
-                            )
+                            else:
+                                new_filestring = read_input_prefill(
+                                    'New img src (Enter nothing to skip) : ',
+                                    media_server_url + guess_new_imagepath(
+                                        cur_a_href_value,
+                                        media_server_url,
+                                        subdir_string + cur_tree_location
+                                    )
+                                )
 
                             if new_filestring is '':
                                 replace_queue[cur_raw_a_tag_value_orig] = ''
@@ -109,25 +121,15 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                             # Do not proceed any further if '' was received as new_filestring:
                             #
                             if not new_filestring is '':
-                                if not cur_a_href_value.startswith('http://'):
-                                    if cur_a_href_value.startswith('/'):
-                                        copy_source = read_input_prefill(
-                                            'Original Source : ',
-                                            cur_a_href_value.replace('%20', ' ')
-                                        )
-                                        copy_target = read_input_prefill(
-                                            'New Dest : ',
-                                            new_filestring.replace(media_server_url, '')
-                                        )
-                                    else:
-                                        original_source = subdir_string + cur_tree_location + '/' + cur_a_href_value
-                                        copy_source = read_input_prefill(
-                                            'Original Source : ',
-                                            re.sub('/{2,}','',original_source.replace('/./','/')).replace('%20', ' ')
-                                        )
-                                        copy_target = read_input_prefill(
-                                            'New Dest : ',
-                                            re.sub(
+                                if options.auto_process is True:
+                                    if not cur_a_href_value.startswith('http://'):
+                                        if cur_a_href_value.startswith('/'):
+                                            copy_source = cur_a_href_value.replace('%20', ' ')
+                                            copy_target = new_filestring.replace(media_server_url, '')
+                                        else:
+                                            original_source = subdir_string + cur_tree_location + '/' + cur_a_href_value
+                                            copy_source = re.sub('/{2,}','',original_source.replace('/./','/')).replace('%20', ' ')
+                                            copy_target = re.sub(
                                                 '/{2,}',
                                                 '/',
                                                 subdir_string + '/' + guess_new_imagepath(
@@ -136,16 +138,47 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                                     cur_tree_location
                                                 )
                                             )
-                                        )
+                                    else:
+                                        copy_source = urlparse(cur_a_href_value).path.replace('%20', ' ')
+                                        copy_target = guess_new_imagepath(urlparse(cur_a_href_value).path,  media_server_url, '')
                                 else:
-                                    copy_source = read_input_prefill(
-                                        'Original Source : ',
-                                        urlparse(cur_a_href_value).path.replace('%20', ' ')
-                                    )
-                                    copy_target = read_input_prefill(
-                                        'New Dest : ',
-                                        guess_new_imagepath(urlparse(cur_a_href_value).path,  media_server_url, '')
-                                    )
+                                    if not cur_a_href_value.startswith('http://'):
+                                        if cur_a_href_value.startswith('/'):
+                                            copy_source = read_input_prefill(
+                                                'Original Source : ',
+                                                cur_a_href_value.replace('%20', ' ')
+                                            )
+                                            copy_target = read_input_prefill(
+                                                'New Dest : ',
+                                                new_filestring.replace(media_server_url, '')
+                                            )
+                                        else:
+                                            original_source = subdir_string + cur_tree_location + '/' + cur_a_href_value
+                                            copy_source = read_input_prefill(
+                                                'Original Source : ',
+                                                re.sub('/{2,}','',original_source.replace('/./','/')).replace('%20', ' ')
+                                            )
+                                            copy_target = read_input_prefill(
+                                                'New Dest : ',
+                                                re.sub(
+                                                    '/{2,}',
+                                                    '/',
+                                                    subdir_string + '/' + guess_new_imagepath(
+                                                        cur_a_href_value,
+                                                        media_server_url,
+                                                        cur_tree_location
+                                                    )
+                                                )
+                                            )
+                                    else:
+                                        copy_source = read_input_prefill(
+                                            'Original Source : ',
+                                            urlparse(cur_a_href_value).path.replace('%20', ' ')
+                                        )
+                                        copy_target = read_input_prefill(
+                                            'New Dest : ',
+                                            guess_new_imagepath(urlparse(cur_a_href_value).path,  media_server_url, '')
+                                        )
                                 copy_queue[copy_source] = copy_target
 
         write_tree_file_with_changes(file_as_string, replace_queue, full_treeitem_filepath)
