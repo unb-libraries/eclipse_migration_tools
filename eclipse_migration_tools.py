@@ -58,13 +58,13 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
     new_imagepath_guess = re.sub('(?<!http:)/{2,}', '/', new_imagepath_guess)
     return new_imagepath_guess
 
-def write_copy_script_intro(script_file_handle, subdir_string, temp_filepath_on_eclipse = '/tmp'):
+def write_copy_script_intro(script_file_handle, subdir_string, temp_filepath_on_eclipse = '/home/jsanford/copy-temp'):
     temp_dir_string = 'migrate' + subdir_string.replace('/', '') + '-img-to-media'
     script_file_handle.write("rm -rf {0}/{1}\n".format(temp_filepath_on_eclipse,temp_dir_string))
     script_file_handle.write("rm -rf {0}/htdocs\n".format(temp_filepath_on_eclipse))
     script_file_handle.write("mkdir {0}/{1}\n".format(temp_filepath_on_eclipse,temp_dir_string))
 
-def write_copy_queue_to_script(script_file_handle, copy_queue, temp_filepath_on_eclipse = '/tmp'):
+def write_copy_queue_to_script(script_file_handle, copy_queue, temp_filepath_on_eclipse = '/home/jsanford/copy-temp'):
     temp_dir_string = 'migrate' + subdir_string.replace('/', '') + '-img-to-media'
     for copy_source, copy_target in copy_queue.items():
         if not copy_source is '' or not copy_target is '':
@@ -76,16 +76,16 @@ def write_copy_queue_to_script(script_file_handle, copy_queue, temp_filepath_on_
             script_file_handle.write("    mkdir -p \".{0}\"\n".format(os.path.dirname(copy_target)))
             script_file_handle.write("    mv \".{0}\" \".{1}\"\n".format(copy_source, copy_target))
             script_file_handle.write("else\n")
-            script_file_handle.write("	echo \".{0}\" >> missing_files_from_move.txt\n".format(copy_source))
+            script_file_handle.write("    echo \".{0}\" >> missing_files_from_move.txt\n".format(copy_source))
             script_file_handle.write("fi\n")
 
-def write_copy_script_outro(script_file_handle, subdir_string, temp_filepath_on_eclipse = '/tmp'):
+def write_copy_script_outro(script_file_handle, subdir_string, temp_filepath_on_eclipse = '/home/jsanford/copy-temp'):
     temp_dir_string = 'migrate' + subdir_string.replace('/', '') + '-img-to-media'
     script_file_handle.write("find {0}/{1} -type d -depth -empty -exec rmdir \"{{}}\" \;\n".format(temp_filepath_on_eclipse,temp_dir_string))
     script_file_handle.write("cd {0}\n".format(temp_filepath_on_eclipse))
     script_file_handle.write("mv " + temp_dir_string + " htdocs\n")
-    script_file_handle.write("tar cvzpf /tmp/" + subdir_string.replace('/', '') + "-img-transfer.tar.gz htdocs\n")
-    script_file_handle.write("scp /tmp/" + subdir_string.replace('/', '') + "-img-transfer.tar.gz gorgon:/var/www/media.lib.unb.ca/\n")
+    script_file_handle.write("tar cvzpf " + temp_filepath_on_eclipse + "/" + subdir_string.replace('/', '') + "-img-transfer.tar.gz htdocs\n")
+    script_file_handle.write("scp " + temp_filepath_on_eclipse + "/" + subdir_string.replace('/', '') + "-img-transfer.tar.gz gorgon:/var/www/media.lib.unb.ca/\n")
     script_file_handle.close()
 
 def write_tree_file_with_changes(file_as_string, replace_queue, full_treeitem_filepath):
