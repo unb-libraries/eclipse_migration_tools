@@ -33,16 +33,16 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
     Guess at the desired 'new' path for image binaries, based on convoluted mess.
     """
     image_path = image_path.replace('%20', '_')
-    if image_path.startswith('http://lib.unb.ca/'):
-        image_path = image_path.replace('http://lib.unb.ca', '')
+    if image_path.startswith('http://lib.unb.ca/') or image_path.startswith('https://lib.unb.ca/'):
+        image_path = image_path.replace('http://lib.unb.ca', '').replace('https://lib.unb.ca', '')
         slugged_path = slugify_path(unicode(image_path))
         return slugged_path
-    if image_path.startswith('http://www.lib.unb.ca/'):
-        image_path = image_path.replace('http://www.lib.unb.ca', '')
+    if image_path.startswith('http://www.lib.unb.ca/') or image_path.startswith('https://www.lib.unb.ca/'):
+        image_path = image_path.replace('http://www.lib.unb.ca', '').replace('https://www.lib.unb.ca', '')
         slugged_path = slugify_path(unicode(image_path))
         return slugged_path
-    if image_path.startswith('http://dev.hil.unb.ca/'):
-        image_path = image_path.replace('http://dev.hil.unb.ca', '')
+    if image_path.startswith('http://dev.hil.unb.ca/') or image_path.startswith('https://dev.hil.unb.ca/'):
+        image_path = image_path.replace('http://dev.hil.unb.ca', '').replace('https://dev.hil.unb.ca', '')
         slugged_path = slugify_path(unicode(image_path))
         return slugged_path
     if image_path.startswith('/') :
