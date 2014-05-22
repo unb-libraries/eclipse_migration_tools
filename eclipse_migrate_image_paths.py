@@ -105,7 +105,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                             media_server_url,
                                             subdir_string + cur_tree_location
                                         )
-                                    elif not src_image_path.startswith('http://'):
+                                    elif not src_image_path.startswith('http://') and not src_image_path.startswith('https://'):
                                         original_source = subdir_string + cur_tree_location + '/' + src_image_path
                                         copy_source = re.sub('/{2,}','',original_source.replace('/./','/')).replace('%20', ' ')
                                         copy_target = re.sub(
@@ -140,7 +140,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                                 subdir_string + cur_tree_location
                                             )
                                         )
-                                    elif not src_image_path.startswith('http://'):
+                                    elif not src_image_path.startswith('http://') and not src_image_path.startswith('https://'):
                                         original_source = subdir_string + cur_tree_location + '/' + src_image_path
                                         copy_source = read_input_prefill(
                                             'Original source : ',

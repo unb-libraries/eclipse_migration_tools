@@ -97,7 +97,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                             #
                             if not new_filestring is '':
                                 if options.auto_process is True:
-                                    if not cur_css_url_value.startswith('http://'):
+                                    if not cur_css_url_value.startswith('http://') and not cur_css_url_value.startswith('https://'):
                                         if cur_css_url_value.startswith('/'):
                                             copy_source = cur_css_url_value.replace('%20', ' ')
                                             copy_target = new_filestring.replace(media_server_url, '')
@@ -117,7 +117,7 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                         copy_source = urlparse(cur_css_url_value).path.replace('%20', ' ')
                                         copy_target = guess_new_imagepath(urlparse(cur_css_url_value).path,  media_server_url, '')
                                 else:
-                                    if not cur_css_url_value.startswith('http://'):
+                                    if not cur_css_url_value.startswith('http://') and not cur_css_url_value.startswith('https://') :
                                         if cur_css_url_value.startswith('/'):
                                             copy_source = read_input_prefill(
                                                 'Original Source : ',
