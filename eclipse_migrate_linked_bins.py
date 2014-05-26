@@ -26,6 +26,8 @@ media_bins_suffixes = (
     ".tif",
     ".tiff",
     ".psd",
+    ".pps",
+    ".ppsx",
     ".bmp",
     ".mp3",
     ".mp4",
