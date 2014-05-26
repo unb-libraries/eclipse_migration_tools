@@ -121,12 +121,6 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                         copy_source = urlparse(src_image_path).path.replace('%20', ' ')
                                         copy_target = urlparse(src_image_path).path
                                 else:
-                                    src_image_path = src_image_tag['src']
-                                    if subdir_string in src_image_path :
-                                        src_image_path = re.sub(subdir_string, '', src_image_path)
-                                    if subdir_string in new_filestring :
-                                        new_filestring = re.sub(subdir_string, '', new_filestring)
-
                                     if src_image_tag['src'].startswith('/'):
                                         copy_source = read_input_prefill(
                                             'Original source : ',
