@@ -123,7 +123,10 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                             if not new_filestring is '':
                                 if options.auto_process is True:
                                     if not cur_a_href_value.startswith('http://') and not cur_a_href_value.startswith('https://'):
-                                        if cur_a_href_value.startswith('/'):
+                                        if cur_a_href_value.startswith('.'):
+                                            copy_source = os.path.normpath(subdir_string + cur_tree_location + '/' + cur_a_href_value)
+                                            copy_target = slugify_path(os.path.normpath(subdir_string + cur_tree_location + '/' + cur_a_href_value))
+                                        elif cur_a_href_value.startswith('/'):
                                             copy_source = cur_a_href_value.replace('%20', ' ')
                                             copy_target = new_filestring.replace(media_server_url, '')
                                         else:
@@ -143,7 +146,16 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                         copy_target = guess_new_imagepath(urlparse(cur_a_href_value).path,  media_server_url, '')
                                 else:
                                     if not cur_a_href_value.startswith('http://') and not cur_a_href_value.startswith('https://'):
-                                        if cur_a_href_value.startswith('/'):
+                                        if cur_a_href_value.startswith('.'):
+                                            copy_source = read_input_prefill(
+                                                'Original Source : ',
+                                                os.path.normpath(subdir_string + cur_tree_location + '/' + cur_a_href_value)
+                                            )
+                                            copy_target = read_input_prefill(
+                                                'New Dest : ',
+                                                slugify_path(os.path.normpath(subdir_string + cur_tree_location + '/' + cur_a_href_value))
+                                            )
+                                        elif cur_a_href_value.startswith('/'):
                                             copy_source = read_input_prefill(
                                                 'Original Source : ',
                                                 cur_a_href_value.replace('%20', ' ')

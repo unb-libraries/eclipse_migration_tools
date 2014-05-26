@@ -98,7 +98,10 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                     new_filestring = re.sub(subdir_string, '', new_filestring)
 
                                 if options.auto_process is True:
-                                    if src_image_tag['src'].startswith('/'):
+                                    if src_image_tag['src'].startswith('.'):
+                                        copy_source = os.path.normpath(subdir_string + cur_tree_location + '/' + src_image_path)
+                                        copy_target = slugify_path(os.path.normpath(subdir_string + cur_tree_location + '/' + src_image_path))
+                                    elif src_image_tag['src'].startswith('/'):
                                         copy_source = src_image_tag['src'].replace('./','').replace('%20', ' ')
                                         copy_target = guess_new_imagepath(
                                             src_image_tag['src'],
@@ -121,7 +124,16 @@ for parse_root, dirs, tree_files in os.walk(tree_to_walk):
                                         copy_source = urlparse(src_image_path).path.replace('%20', ' ')
                                         copy_target = urlparse(src_image_path).path
                                 else:
-                                    if src_image_tag['src'].startswith('/'):
+                                    if src_image_tag['src'].startswith('.'):
+                                        copy_source = read_input_prefill(
+                                            'Original source : ',
+                                            os.path.normpath(subdir_string + cur_tree_location + '/' + src_image_path)
+                                        )
+                                        copy_target = read_input_prefill(
+                                            'New dest : ',
+                                            slugify_path(os.path.normpath(subdir_string + cur_tree_location + '/' + src_image_path))
+                                        )
+                                    elif src_image_tag['src'].startswith('/'):
                                         copy_source = read_input_prefill(
                                             'Original source : ',
                                             src_image_tag['src'].replace('./','').replace('%20', ' ')

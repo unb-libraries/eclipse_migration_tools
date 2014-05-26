@@ -50,7 +50,11 @@ def guess_new_imagepath(image_path, server_url, subdir_slug):
     if image_path.startswith('./') :
         image_path = image_path.replace('./', '')
     if './' in image_path or '../' in image_path:
+        if image_path.startswith('.'):
+            image_path = subdir_slug + '/' + image_path
         image_path = os.path.normpath(image_path)
+        slugged_path = slugify_path(unicode(image_path))
+        return slugged_path
     if subdir_slug in image_path:
         image_path = image_path.replace(subdir_slug, '')
     slugged_path = slugify_path(unicode(image_path))
